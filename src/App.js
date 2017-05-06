@@ -39,15 +39,30 @@ class Issues extends Component {
       <table>
         <tbody>
           {this.state.fullList.map(row => {
-            var path, sub, before, after;
-            [path, sub, before, after] = row;
+            let path, sub, before, after;
+            [path, sub, before, after] = row
+            let ma = /.*\/([a-z0-9-]+)_.*/.exec(path)
+            if (!ma) {
+              return (<tr><td>PARSE ERROR ARGH</td></tr>);
+            }
+            let pkg = ma[1];
             return (
               <tr>
-                <td>{path}</td>
-                <td>{sub}</td>
+                <td className='pkg-name'>
+                  <h3>{pkg}</h3>
+                  <p>
+                    <a href={'https://tests.reproducible-builds.org/' + path}>full dbd.txt</a>
+                  </p>
+                  <p>
+                    <a href={'https://tests.reproducible-builds.org/debian/rb-pkg/unstable/amd64/' + pkg + '.html'}>
+                      Reproducible Builds info page
+                    </a>
+                  </p>
+                </td>
                 <td>
-                  <pre>{before}</pre>
-                  <pre>{after}</pre>
+                  <h3>{sub}</h3>
+                  <pre className="before">{before}</pre>
+                  <pre className="after">{after}</pre>
                 </td>
               </tr>
             )

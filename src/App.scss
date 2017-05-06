@@ -1,6 +1,36 @@
 .app {
+  width: 100%;
+
   .title {
     font-size: 18px;
     font-weight: bold;
+  }
+
+  table {
+    max-width: 100%;
+  }
+
+  td.pkg-name {
+    max-width: 20em;
+  }
+
+  td {
+    border-top: 1px solid black;
+  }
+
+  pre {
+    overflow: auto;
+    max-width: 60em;
+    max-height: 10em;
+  }
+
+  pre.before {
+    background-color: #400;
+    color: white;
+  }
+
+  pre.after {
+    background-color: #040;
+    color: white;
   }
 }
