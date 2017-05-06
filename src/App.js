@@ -2,15 +2,37 @@ import React, { Component } from 'react'
 import './App.scss'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      page: 0
+    }
+    this.prevPage = () => this.setState((old, props) =>
+      old.page--
+    )
+    this.nextPage = () => this.setState((old, props) =>
+      old.page++
+    )
+  }
+
   render () {
     return (
       <div className='app'>
         <div className='app-header'>
-          <h2>Interesting diffs:</h2>
+          <h2>Interesting diffs</h2>
         </div>
         <div>
-          <Issues/>
+          <Issues page={this.state.page}/>
         </div>
+        <p>
+          <button onClick={this.prevPage}>
+            prev page
+          </button>
+          <button onClick={this.nextPage}>
+            next page
+          </button>
+          (I'm so sorry for how bad the paging is.)
+        </p>
       </div>
     )
   }
@@ -45,7 +67,7 @@ class Issues extends Component {
     return (
       <table>
         <tbody>
-          {this.state.fullList.map(row => {
+          {this.state.fullList.slice(this.props.page * 200, (this.props.page + 1) * 200).map(row => {
             let path, sub, before, after;
             [path, sub, before, after] = row
             let ma = /.*\/([a-z0-9.+-]+)_.*/.exec(path)
@@ -69,8 +91,11 @@ class Issues extends Component {
                     { (
                       () => {
                         let ret = []
-                        let issues, note;
-                        [issues, note] = this.state.notes[pkg]
+                        let issues = [];
+                        let note = false;
+                        if (pkg in this.state.notes) {
+                          [issues, note] = this.state.notes[pkg]
+                        }
                         issues.forEach(issue =>
                           ret.push(<li>{issue.replace(/_/g, ' ')}</li>)
                         )
