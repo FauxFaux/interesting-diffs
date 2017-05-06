@@ -21,7 +21,8 @@ class Issues extends Component {
     super(props)
 
     this.state = {
-      fullList: []
+      fullList: [],
+      notes: {}
     }
   }
 
@@ -30,6 +31,12 @@ class Issues extends Component {
       .then(response => {
         response.json().then(fullList => {
           this.setState({fullList})
+        })
+      })
+    fetch('static/notes.json')
+      .then(response => {
+        response.json().then(notes => {
+          this.setState({notes})
         })
       })
   }
@@ -49,15 +56,31 @@ class Issues extends Component {
             return (
               <tr>
                 <td className='pkg-name'>
-                  <h3>{pkg}</h3>
-                  <p>
-                    <a href={'https://tests.reproducible-builds.org/' + path}>full dbd.txt</a>
-                  </p>
-                  <p>
+                  <h3>{pkg}
+                    <span> - </span>
                     <a href={'https://tests.reproducible-builds.org/debian/rb-pkg/unstable/amd64/' + pkg + '.html'}>
-                      Reproducible Builds info page
+                      rp.d.n
                     </a>
-                  </p>
+                    <span> - </span>
+                    <a href={'https://tests.reproducible-builds.org/' + path}>dbd.txt</a>
+                  </h3>
+
+                  <ul>
+                    { (
+                      () => {
+                        let ret = []
+                        let issues, note;
+                        [issues, note] = this.state.notes[pkg]
+                        issues.forEach(issue =>
+                          ret.push(<li>{issue.replace(/_/g, ' ')}</li>)
+                        )
+                        if (note) {
+                          ret.push(<li>..and has a textual note</li>)
+                        }
+                        return ret
+                      })()
+                    }
+                  </ul>
                 </td>
                 <td>
                   <h3>{sub}</h3>
