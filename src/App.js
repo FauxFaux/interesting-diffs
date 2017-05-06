@@ -48,7 +48,7 @@ class Issues extends Component {
           {this.state.fullList.map(row => {
             let path, sub, before, after;
             [path, sub, before, after] = row
-            let ma = /.*\/([a-z0-9-]+)_.*/.exec(path)
+            let ma = /.*\/([a-z0-9.+-]+)_.*/.exec(path)
             if (!ma) {
               return (<tr><td>PARSE ERROR ARGH</td></tr>);
             }
